@@ -17,7 +17,7 @@ var AuthorSchema = new Schema (
 AuthorSchema
 .virtual('name')
 .get(function (){
-  return this.family_name + '' + this.first_name;
+  return this.family_name + ', ' + this.first_name;
 });
 
 //Virtual for author lifespan
@@ -47,7 +47,7 @@ AuthorSchema.virtual('date_of_death_yyyy_mm_dd').get(function() {
 AuthorSchema
 .virtual('url')
 .get(function() {
-  return 'catalog/author' + this._id;
+  return '/catalog/author/' + this._id;
 });
 
 //Export model
