@@ -56,7 +56,7 @@ exports.genre_create_get = [
 
       if (!errors.isEmpty()){
         //There are errors. Render the form again with sanitized values/error messages.
-        res.render('genre_form', { title: 'Create Genre', genre: genre, errors: errors.array()});
+        res.render('genre_form', { title: 'Create Genre', genre: genre});
         return;
       }
       else {
@@ -84,8 +84,50 @@ exports.genre_create_get = [
 ];
 
 // Handle Genre create on POST.
-exports.genre_create_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Genre create POST');
+exports.genre_create_post = function(req, res, next) {
+   
+    //Validate and sanitize the name field.
+    body('name', 'Genre name is required').trim().isLength({min: 1}).escape(),
+
+    // Process request after validation and sanitization
+    (req,res,next) => {
+    
+        // Extract the validation erros from request.
+        const errors = validationResult(req);
+
+        // Create a genre object with escaped and trimmed data.
+
+        var genre = new Genre(
+          { name: req.body.name }
+        );
+
+        if(!error.isEmpty()){
+          // There are errors. Render the form again with sanitized valus/error messages.
+          res.render('genre_form', { title: 'Create genre', genre: genre, errors: errors.array()});
+          return;
+        }
+        else {
+          // Data form is valid
+          // Check if Genre with same name already exists.
+          Genre.findOne({ 'name': req.body.name })
+          .exec(function(err, found_genre){
+            if (err) { return next(err); }
+
+            if(found_genre) {
+              // Genre exists, redirect to it's detail page.
+              res.redirect(found_genre.url);
+            }
+            else {
+
+              genre.save(function (err){
+                if (err) {return next(err);}
+                // Genre saved. Redirect to genre detail page.
+                res.redirect(genre.url);
+              });
+            }
+          });
+        }
+    }
 };
 
 // Display Genre delete form on GET.

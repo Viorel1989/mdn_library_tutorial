@@ -37,7 +37,7 @@ exports.author_detail = function(req,res, next){
       return next(err);
     }
     //Successful, so render
-    res.render('author_detail', {title: 'Author Detail', author: results.author, author_books: results.author_books });
+    res.render('author_detail', {title: 'Author Detail', author: results.author, author_books: results.authors_books });
    });
 };
 
@@ -106,7 +106,7 @@ exports.author_delete_get = function(req, res) {
         res.redirect('/catalog/authors');
       }
       // Succesful, so render.
-      res.render('author_delete', {title: 'Delte Author', author: results.author, author_books:results.authors_books } );
+      res.render('author_delete', {title: 'Delete Author', author: results.author, author_books:results.author_books } );
     });
 };
 
