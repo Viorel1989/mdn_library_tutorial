@@ -171,12 +171,12 @@ exports.book_delete_get = function(req, res, next) {
           res.redirect('catalog/books');
         }
         // Succesful so render.
-        res.render('book_delete', {title: 'Delete book', book: results.book, book_instances: results.book_bookinstances});
+        res.render('book_delete', { title: 'Delete book', book: results.book, book_instances: results.book_bookinstances});
     });
 };
 
 // Handle book delete on POST.
-exports.book_delete_post = function(req, res) {
+exports.book_delete_post = function(req, res, next) {
   
     async.parallel({
       book: function(callback){
